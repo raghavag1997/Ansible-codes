@@ -1,9 +1,0 @@
-#This playbook will show you how to use template module for dynamic content in text file
-- hosts: all
-  vars:
-    - myname: "Raghav"
-  tasks:
-   - name: Copy the files using template module
-     template:
-       src: 
-       dest: /myindex.txt 

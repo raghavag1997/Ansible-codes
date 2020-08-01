@@ -1,0 +1,15 @@
+#This playbook will tell u condition in Playbook
+- hosts: all
+  tasks:
+  - name: "Copying the files"
+    copy:
+      src: index.html
+      dest: /index.html
+    register: x
+  - name: printing the date only when succesfull copy of file
+    command: 
+      date
+    when: x.failed==false
+  - name: Printing the output of copy module
+    debug:
+      var: x 
