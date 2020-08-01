@@ -1,0 +1,14 @@
+#This Playbook will give you information about how to store o/p of any modules
+- hosts: all
+  tasks: 
+  - name: Installing the package
+    package:
+      name: httpd
+      state: present
+    register: x
+  - name: Printing the output of package module
+    debug: 
+      var: x 
+  - name: Printing the return code only
+    debug:
+      msg: "Return code of module {{ x.rc }}"

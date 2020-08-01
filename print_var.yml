@@ -1,0 +1,12 @@
+#This playbook will print the variables in console
+- hosts: all
+  vars:
+    - myname: Raghav
+  tasks:
+    - name: Printing the variables
+      debug:
+        var: myname
+    - name: Printing the variables using debug + msg 
+      debug:
+        msg: "My name is {{ myname }}"
+  

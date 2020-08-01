@@ -1,0 +1,14 @@
+- hosts: all
+  tasks:
+    - name: Installing the apache web server
+      package:
+        name: httpd
+        state: present
+    - name: Copy the contents to file
+      copy:
+        content: "This is my Home Page\n"
+        dest: /var/www/html/index.html
+    - name: Starting the web Server
+      service:
+        name: httpd
+        state: started 

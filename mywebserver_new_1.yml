@@ -1,0 +1,9 @@
+#Concept of variables in ansible
+- hosts: all
+  vars: 
+    - myname: "Raghav"
+  tasks:
+    - name: Copy the content in file using variables
+      copy:
+        content: " This is my content {{ myname }}"
+        dest: /index.html
