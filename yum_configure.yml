@@ -1,0 +1,44 @@
+- hosts: all
+  tasks:
+    - name: Adding the yum repo to server
+      yum_repository:
+        name: Docker #This unique id for repo 
+        file: test   #This file name followed by extension .repo
+        baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
+        gpgcheck: 0
+        description: This yum repo configure by ansible
+    - name: Installing Docker 
+      package: 
+        name: docker-ce-3:18.09.1-3.el7.x86_64
+        state: present
+    - name: Starting the Docker service
+      service:
+        name: docker
+        state: started
+    - name: Installing Docker sdk
+      pip:
+        name: docker-py
+        executable: pip3
+        state: latest
+    - name: Pulling the httpd image
+      docker_image:
+        name: httpd
+        source: pull
+    - name: Creating the docker volume
+      docker_volume:
+        name: my_httpd
+    - name: Copy Source code into volumes
+      copy:
+        src: index.html
+        dest: /var/lib/docker/volumes/my_httpd/_data/
+    - name: Creating httpd container
+      docker_container:
+        name: myhttpd
+        image: httpd
+        ports:
+          - "80:80"
+        volumes:
+          - "my_httpd:/usr/local/apache2/htdocs/:rw"
+        detach: true
+
+    
