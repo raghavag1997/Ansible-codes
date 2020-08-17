@@ -1,0 +1,75 @@
+Ansible Privilege escalation setup
+
+On Controller Node
+Create a one user named as jenkins1 don't give any power just create one user in it
+
+On Managed Node
+Create a one user as ubuntu give as complete power by entry in /etc/sudoers file
+
+ubuntu ALL=(ALL) NOPASSWD: ALL
+
+go to controller Node once again 
+create ansible.cfg file in jenkins1 user
+vi ansible.cfg
+[defaults]
+host_key_checking=false
+inventory=/home/jenkins1/hosts
+
+Now create hosts file in location /home/jenkins/hosts
+<Managed_NODE_IP> ansible_ssh_user=ubuntu ansible_ssh_pass=123
+
+Now run following command
+-> ansible all -m ping 
+   You find it sucess
+
+But as same time
+-> ansible all -m command -a 'cat /etc/shadow'
+   It showed permission denied
+   for this you need to pass one argument
+-> ansible all -m command -a 'cat /etc/shadow' --become
+   -- become act like as sudo cat /etc/shadow
+
+Now this setup done
+
+Now if created playbook so for running playbook you also need to pass this argument 
+--become
+
+There are 3 more arguments which you should know
+--become-method=sudo By default it is sudo . But in market there are differnet type of
+                privilege escalation methods are avaialable
+--become-user=root By default it is root. But if you want another user power you can
+              specify it
+--become-ask-pass=false 
+
+all these arguments you can pass to ansible.cfg file
+
+
+[privilege_escalation]
+become=true
+become_method=sudo
+become_user=root
+become_ask_pass=false
+
+
+
+Now run playbook 
+ansible-playbook test.yml
+
+It will run sucessfully
+
+
+Now password less mechanism 
+
+ssh-keygen in controller node 
+it will create two files in .ssh
+one is private key one is public key file 
+private key extension would be id_rsa and public key would be id_rsa.pub
+
+Now you need to copy these public key to Managed node by
+ssh-copy-id ubuntu@192.168.99.105 
+
+
+On Managed Node it will create one folder.ssh/ and one file in it authorized_keys
+and inside this file our public key is there
+
+
