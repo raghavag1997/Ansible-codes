@@ -1,0 +1,11 @@
+- hosts: localhost
+  vars_files:
+    - myvault.yml
+    - myvault1.yml
+  tasks:
+  - name: Printing first vault variable
+    debug:
+      var: x
+  - name: printing second vault variable
+    debug:
+      var: y
